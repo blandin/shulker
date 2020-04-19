@@ -40,7 +40,7 @@ class MinecraftHandler {
     if (this.config.DEBUG) console.log('[DEBUG] Received ' + data)
 
     const authLineDataRegex = new RegExp(
-      `${(this.config.REGEX_AUTH_PREFIX || "\\[User Authenticator #1/INFO\\]:")} (.*)`
+      `${(this.config.REGEX_AUTH_PREFIX || "\\[User Authenticator #[0-9]+/INFO\\]:")} (.*)`
     )
 
     // get the part after the log prefix, so all the actual data is here
