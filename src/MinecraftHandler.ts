@@ -8,6 +8,7 @@ import { Config } from './Config'
 export type LogLine = {
   username: string
   message: string
+  uuid: string
 } | null
 
 type Callback = (data: LogLine) => void
@@ -17,6 +18,8 @@ class MinecraftHandler {
 
   app: express.Application
   tail: Tail
+
+  uuid: {[index: string]: string}
 
   constructor(config: Config) {
     this.config = config
@@ -36,6 +39,31 @@ class MinecraftHandler {
 
     if (this.config.DEBUG) console.log('[DEBUG] Received ' + data)
 
+    const authLineDataRegex = new RegExp(
+      `${(this.config.REGEX_AUTH_PREFIX || "\\[User Authenticator #1/INFO\\]:")} (.*)`
+    )
+
+    // get the part after the log prefix, so all the actual data is here
+    const authLineData = data.match(authLineDataRegex)
+
+    if (authLineDataRegex.test(data) && authLineData) {
+      const logLine = authLineData[1]
+
+      const re = new RegExp(this.config.REGEX_MATCH_UUID)
+      const matches = logLine.match(re)
+
+      if (!matches) {
+        console.log('[ERROR] Could not parse message: ' + logLine)
+        return null
+      }
+
+      const username = MinecraftHandler.fixMinecraftUsername(matches[1])
+      const uuid = matches[2]
+
+      this.uuid[username] = uuid
+      return null
+    }
+
     const logLineDataRegex = new RegExp(
       `${(this.config.REGEX_SERVER_PREFIX || "\\[Server thread/INFO\\]:")} (.*)`
     )
@@ -54,7 +82,7 @@ class MinecraftHandler {
     const logLine = logLineData[1]
 
     // the username used for server messages
-    const serverUsername = `${this.config.SERVER_NAME} - Server`
+    const serverUsername = `${this.config.SERVER_NAME}`
 
     if (logLine.startsWith('<')) {
       if (this.config.DEBUG){
@@ -75,7 +103,7 @@ class MinecraftHandler {
         console.log('[DEBUG] Username: ' + matches[1])
         console.log('[DEBUG] Text: ' + matches[2])
       }
-      return { username, message }
+      return { username: username, message: message, uuid: (this.uuid[username] || '') }
     } else if (
       this.config.SHOW_PLAYER_CONN_STAT && (
         logLine.includes('left the game') ||
@@ -87,20 +115,20 @@ class MinecraftHandler {
         console.log(`[DEBUG]: A player's connection status changed`)
       }
 
-      return { username: serverUsername, message: logLine }
+      return { username: serverUsername, message: logLine, uuid: '' }
     } else if (this.config.SHOW_PLAYER_ADVANCEMENT && logLine.includes('made the advancement')) {
       // handle advancements
       if (this.config.DEBUG){
         console.log('[DEBUG] A player has made an advancement')
       }
-      return { username: `${this.config.SERVER_NAME} - Server`, message: logLine }
+      return { username: `${this.config.SERVER_NAME}`, message: logLine, uuid: '' }
     } else if (this.config.SHOW_PLAYER_ME && logLine.startsWith('* ')) {
       // /me commands have the bolded name and the action they did
       const usernameMatch = data.match(/: \* ([a-zA-Z0-9_]{1,16}) (.*)/)
       if (usernameMatch) {
         const username = usernameMatch[1]
         const rest = usernameMatch[2]
-        return { username: serverUsername, message: `**${username}** ${rest}` }
+        return { username: serverUsername, message: `**${username}** ${rest}` , uuid: ''}
       }
     } else if (this.config.SHOW_PLAYER_DEATH) {
       for (let word of this.config.DEATH_KEY_WORDS){
@@ -110,7 +138,7 @@ class MinecraftHandler {
               `[DEBUG] A player died. Matched key word "${word}"`
             )
           }
-          return { username: serverUsername, message: logLine }
+          return { username: serverUsername, message: logLine, uuid: '' }
         }
       }
     }
@@ -203,6 +231,7 @@ class MinecraftHandler {
     } else {
       this.initWebServer(callback)
     }
+    this.uuid = {}
   }
 }
 

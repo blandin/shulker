@@ -32,8 +32,8 @@ class Shulker {
   onDiscordReady () {
     this.handler.init(async (data: LogLine) => {
       if (data) {
-        const { username, message } = data
-        await this.discordClient.sendMessage(username, message)
+        const { username, message, uuid } = data
+        await this.discordClient.sendMessage(username, message, uuid)
       }
     })
   }

@@ -27,6 +27,8 @@ export interface Config {
   SLASH_COMMAND_ROLES: string[]
 
   WEBHOOK: string
+  REGEX_AUTH_PREFIX: string
+  REGEX_MATCH_UUID: string
   REGEX_SERVER_PREFIX: string
   REGEX_MATCH_CHAT_MC: string
   REGEX_IGNORED_CHAT: string
@@ -34,6 +36,8 @@ export interface Config {
 
   SERVER_NAME: string
   SERVER_IMAGE: string
+  AVATAR_URL: string
+  AVATAR_DEFAULT: string
   SHOW_PLAYER_CONN_STAT: boolean
   SHOW_PLAYER_ADVANCEMENT: boolean
   SHOW_PLAYER_DEATH: boolean

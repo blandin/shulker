@@ -135,14 +135,19 @@ class Discord {
     return message
   }
 
-  private makeDiscordWebhook (username: string, message: string) {
+  private makeDiscordWebhook (username: string, message: string, uuid: string) {
     message = this.replaceDiscordMentions(message)
 
+    const steve = 'https://minotar.net/helm/Steve/256.png'
     let avatarURL
-    if (username === this.config.SERVER_NAME + ' - Server') { // use avatar for the server
-      avatarURL = this.config.SERVER_IMAGE || 'https://minotar.net/helm/Steve/256.png'
+    if (username === this.config.SERVER_NAME) { // use avatar for the server
+      avatarURL = this.config.SERVER_IMAGE || steve
+    } else if (this.config.AVATAR_URL.includes('%uuid%') && !uuid) { // Use default because config needs a UUID and we don't have one
+      avatarURL = this.config.AVATAR_DEFAULT || steve
     } else { // use avatar for player
-      avatarURL = `https://minotar.net/helm/${username}/256.png`
+      avatarURL = (this.config.AVATAR_URL || this.config.AVATAR_DEFAULT || steve)
+        .replace('%username%', username)
+        .replace('%uuid%', uuid)
     }
 
     return {
@@ -160,9 +165,9 @@ class Discord {
       .replace('%message%', message)
   }
 
-  public async sendMessage (username: string, message: string) {
+  public async sendMessage (username: string, message: string, uuid: string) {
     if (this.config.USE_WEBHOOKS) {
-      const webhook = this.makeDiscordWebhook(username, message)
+      const webhook = this.makeDiscordWebhook(username, message, uuid)
       try {
         await axios.post(this.config.WEBHOOK_URL, webhook, { headers: { 'Content-Type': 'application/json' } })
       } catch (e) {
