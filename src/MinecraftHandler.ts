@@ -115,20 +115,20 @@ class MinecraftHandler {
         console.log(`[DEBUG]: A player's connection status changed`)
       }
 
-      return { username: serverUsername, message: logLine, uuid: '' }
+      return { username: serverUsername, message: logLine, uuid: 'server' }
     } else if (this.config.SHOW_PLAYER_ADVANCEMENT && logLine.includes('made the advancement')) {
       // handle advancements
       if (this.config.DEBUG){
         console.log('[DEBUG] A player has made an advancement')
       }
-      return { username: `${this.config.SERVER_NAME}`, message: logLine, uuid: '' }
+      return { username: serverUsername, message: logLine, uuid: 'server' }
     } else if (this.config.SHOW_PLAYER_ME && logLine.startsWith('* ')) {
       // /me commands have the bolded name and the action they did
       const usernameMatch = data.match(/: \* ([a-zA-Z0-9_]{1,16}) (.*)/)
       if (usernameMatch) {
         const username = usernameMatch[1]
         const rest = usernameMatch[2]
-        return { username: serverUsername, message: `**${username}** ${rest}` , uuid: ''}
+        return { username: serverUsername, message: `**${username}** ${rest}` , uuid: 'server' }
       }
     } else if (this.config.SHOW_PLAYER_DEATH) {
       for (let word of this.config.DEATH_KEY_WORDS){
@@ -138,7 +138,7 @@ class MinecraftHandler {
               `[DEBUG] A player died. Matched key word "${word}"`
             )
           }
-          return { username: serverUsername, message: logLine, uuid: '' }
+          return { username: serverUsername, message: logLine, uuid: 'server' }
         }
       }
     }

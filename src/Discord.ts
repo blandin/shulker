@@ -140,7 +140,7 @@ class Discord {
 
     const steve = 'https://minotar.net/helm/Steve/256.png'
     let avatarURL
-    if (username === this.config.SERVER_NAME) { // use avatar for the server
+    if (uuid === 'server') { // use avatar for the server
       avatarURL = this.config.SERVER_IMAGE || steve
     } else if (this.config.AVATAR_URL.includes('%uuid%') && !uuid) { // Use default because config needs a UUID and we don't have one
       avatarURL = this.config.AVATAR_DEFAULT || steve
