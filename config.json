@@ -12,6 +12,11 @@
     "MINECRAFT_SERVER_RCON_PORT": 25575,
     "MINECRAFT_SERVER_RCON_PASSWORD": "password",
     "MINECRAFT_TELLRAW_TEMPLATE": "[{\"color\": \"white\", \"text\": \"<%username%> %message%\"}]",
+    "MINECRAFT_JSONTEXT": false,
+    "MINECRAFT_JSONTEXT_USERNAME_COLOR": "white",
+    "MINECRAFT_JSONTEXT_USERNAME_FORMAT": "<%username%>",
+    "MINECRAFT_JSONTEXT_COLOR": "white",
+    "MINECRAFT_JSONTEXT_SPOILERS": false,
 
     "IS_LOCAL_FILE": false,
     "LOCAL_FILE_PATH": "/usr/home/minecraft_server/logs/latest.log",
