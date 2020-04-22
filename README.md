@@ -66,6 +66,11 @@ You can also easily Deploy to Heroku and the like, just be sure to edit `YOUR_UR
     "MINECRAFT_SERVER_RCON_PORT": <1-65535>, /* Minecraft server rcon port */
     "MINECRAFT_SERVER_RCON_PASSWORD": "<your password>", /* Minecraft server rcon password */
     "MINECRAFT_TELLRAW_TEMPLATE": "[{\"color\": \"white\", \"text\": \"<%username%> %message%\"}]", /* Tellraw template to display in Minecraft */
+    "MINECRAFT_JSONTEXT": false, /* Set to true to disable the above string template and build a proper JSON text object for the tellraw command, configure below */
+    "MINECRAFT_JSONTEXT_USERNAME_COLOR": "white", /* Username color, applies to the next line */
+    "MINECRAFT_JSONTEXT_USERNAME_FORMAT": "<%username%>", /* Prepend each Discord message in-game with this - %username% and %discriminator% are available */
+    "MINECRAFT_JSONTEXT_COLOR": "white", /* Text color, applies to the message body */
+    "MINECRAFT_JSONTEXT_SPOILERS": false, /* Turn Discord spoilered text into obfuscated text with plain text hover events */
     
     "IS_LOCAL_FILE": false, /* should tail the local file, may be a little buggy. please report any you find */
     "LOCAL_FILE_PATH": "/usr/home/minecraft_server/logs/latest.log", /* the path to the local file if specified */
