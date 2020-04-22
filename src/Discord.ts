@@ -90,12 +90,47 @@ class Discord {
     rcon.close()
   }
 
+  private buildRawJSONText(username: string, discriminator: string, text: string): string {
+    let components: any[] = [{
+      color: this.config.MINECRAFT_JSONTEXT_USERNAME_COLOR || 'white',
+      text: (this.config.MINECRAFT_JSONTEXT_USERNAME_FORMAT || '<%username%>')
+        .replace('%username%', username)
+        .replace('%discriminator%', discriminator)
+    }, ' ']
+    let spoiler = false
+    for (const piece of text.split(/(\|\|)/)) {
+      if (this.config.MINECRAFT_JSONTEXT_SPOILERS && piece === '||')
+        spoiler = !spoiler
+      else if (!spoiler)
+        components.push({
+          color: this.config.MINECRAFT_JSONTEXT_COLOR || 'white',
+          text: piece
+        })
+      else
+        components.push({
+          color: this.config.MINECRAFT_JSONTEXT_COLOR || 'white',
+          text: piece,
+          obfuscated: true,
+          hoverEvent: {
+            action: 'show_text',
+            value: [piece]
+          }
+        })
+    }
+    return JSON.stringify(components)
+  }
+
   private makeMinecraftTellraw(message: Message): string {
     const variables: {[index: string]: string} = {
       username: emojiStrip(message.author.username),
       discriminator: message.author.discriminator,
       text: emojiStrip(message.cleanContent)
     }
+
+    // Build and return proper JSON if configured
+    if (this.config.MINECRAFT_JSONTEXT)
+      return this.buildRawJSONText(variables.username, variables.discriminator, variables.text);
+
     // hastily use JSON to encode the strings
     for (const v of Object.keys(variables)) {
       variables[v] = JSON.stringify(variables[v]).slice(1,-1)
