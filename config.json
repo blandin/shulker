@@ -24,6 +24,8 @@
     "SLASH_COMMAND_ROLES": [],
 
     "WEBHOOK": "/minecraft/hook",
+    "REGEX_AUTH_PREFIX": "\\[User Authenticator #\\d+/INFO\\]:",
+    "REGEX_MATCH_UUID": "^UUID of player (.*) is (.*)",
     "REGEX_SERVER_PREFIX": "\\[Server thread/INFO\\]:",
     "REGEX_MATCH_CHAT_MC": "^<([^>]*)> (.*)",
     "REGEX_IGNORED_CHAT": "packets too frequently",
@@ -31,6 +33,8 @@
 
     "SERVER_NAME": "Shulker",
     "SERVER_IMAGE": "",
+    "AVATAR_URL": "https://minotar.net/helm/%username%/256.png",
+    "AVATAR_DEFAULT": "https://minotar.net/helm/Steve/256.png",
     "SHOW_PLAYER_CONN_STAT": false,
     "SHOW_PLAYER_ADVANCEMENT": false,
     "SHOW_PLAYER_DEATH": false,

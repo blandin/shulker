@@ -78,13 +78,17 @@ You can also easily Deploy to Heroku and the like, just be sure to edit `YOUR_UR
     "SLASH_COMMAND_ROLES": [], /* if the above is enabled, the names of the roles which can run slash commands */
     
     "WEBHOOK": "/minecraft/hook", /* Web hook, where to send the log to */
-    "REGEX_SERVER_PREFIX": "\\[Server thread/INFO\\]:", /* What the lines of the log should start with */
+    "REGEX_AUTH_PREFIX": "\\[User Authenticator #\\d+/INFO\\]:", /* What player authentication log lines should start with */
+    "REGEX_MATCH_UUID": "^UUID of player (.*) is (.*)", /* What to match for capturing UUIDs (best to leave as default) */
+    "REGEX_SERVER_PREFIX": "\\[Server thread/INFO\\]:", /* What chat log lines should start with */
     "REGEX_MATCH_CHAT_MC": "^<([^>]*)> (.*)", /* What to match for chat (best to leave as default) */
     "REGEX_IGNORED_CHAT": "packets too frequently", /* What to ignore, you can put any regex for swear words for example and it will  be ignored */
     "DEBUG": false, /* Dev debugging */
 
     "SERVER_NAME": "Shulker", /* The username used when displaying any server information in chat, e.g., Server - Shulker : Server message here*/
     "SERVER_IMAGE": "", /* Image for the server when sending such messages (if enabled below). Only for WebHooks. */
+    "AVATAR_URL": "https://minotar.net/helm/%username%/256.png", /* Player avatar URL template - %username% and %uuid% will be replaced with relevant values */
+    "AVATAR_DEFAULT": "https://minotar.net/helm/Steve/256.png", /* Player avatar to show when using %uuid% above but we haven't captured a UUID for the player */
     "SHOW_PLAYER_CONN_STAT": false, /* Shows player connection status in chat, e.g., Server - Shulker : TheMachine joined the game */
     "SHOW_PLAYER_ADVANCEMENT": false, /* Shows when players earn advancements in chat, e.g., Server - Shulker : TheMachine has made the advacement [MEME - Machine] */
     "SHOW_PLAYER_DEATH": false, /* Shows when players die in chat, e.g., Server - Shulker : TheMachine was blown up by creeper */
@@ -96,6 +100,7 @@ You can also easily Deploy to Heroku and the like, just be sure to edit `YOUR_UR
 ## FAQ
 * How do I make this work on a modded server?
   - Try replacing `REGEX_SERVER_PREFIX` with `"\\[Server thread/INFO\\] \\[.*\\]:"`
+  - You may also need to replace `REGEX_AUTH_PREFIX` with `"\\[User Authenticator #\\d+/INFO\\] \\[.*\\]:"`
   
 * Why can't I send commands even if I have the option enabled?
   - Make sure that you have a role on the server which is put in the array `SLASH_COMMAND_ROLES` case-sensitive.
