@@ -46,7 +46,7 @@ class MinecraftHandler {
     // get the part after the log prefix, so all the actual data is here
     const authLineData = data.match(authLineDataRegex)
 
-    if (authLineDataRegex.test(data) && authLineData) {
+    if (authLineData !== null) {
       const logLine = authLineData[1]
 
       const re = new RegExp(this.config.REGEX_MATCH_UUID)
